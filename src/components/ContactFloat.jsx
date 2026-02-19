@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import './ContactFloat.css'
 
@@ -42,26 +43,80 @@ const buttons = [
 ]
 
 export default function ContactFloat() {
+  const [hoveredId, setHoveredId] = useState(null)
+  // Track mobile so we skip the slide-out label animation on small screens.
+  // Lazy initializer reads matchMedia once at mount; effect subscribes to future changes only.
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia('(max-width: 640px)').matches
+  )
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)')
+    const handler = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
   return (
     <div className="cf-wrapper" role="complementary" aria-label="Quick contact">
-      {buttons.map((btn, i) => (
-        <motion.a
-          key={btn.id}
-          href={btn.href}
-          className="cf-btn"
-          style={{ '--cf-color': btn.color }}
-          target={btn.newTab ? '_blank' : undefined}
-          rel={btn.newTab ? 'noopener noreferrer' : undefined}
-          aria-label={btn.label}
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1 + i * 0.12, duration: 0.45, ease: 'easeOut' }}
-          whileTap={{ scale: 0.94 }}
-        >
-          <span className="cf-label">{btn.label}</span>
-          <span className="cf-icon">{btn.icon}</span>
-        </motion.a>
-      ))}
+      {buttons.map((btn, i) => {
+        const isHovered = hoveredId === btn.id
+
+        return (
+          <motion.a
+            key={btn.id}
+            href={btn.href}
+            className="cf-btn"
+            style={{ '--cf-color': btn.color }}
+            target={btn.newTab ? '_blank' : undefined}
+            rel={btn.newTab ? 'noopener noreferrer' : undefined}
+            aria-label={btn.label}
+            // Entrance animation
+            initial={{ opacity: 0, x: 40 }}
+            animate={{
+              opacity: 1,
+              x: 0,
+              // Glow effect driven by state, not CSS :hover
+              filter: isHovered ? 'brightness(1.1)' : 'brightness(1)',
+              boxShadow: isHovered
+                ? '-5px 3px 20px rgba(0,0,0,0.28)'
+                : '-2px 2px 10px rgba(0,0,0,0.18)',
+            }}
+            transition={{
+              opacity: { delay: 1 + i * 0.12, duration: 0.45, ease: 'easeOut' },
+              x: { delay: 1 + i * 0.12, duration: 0.45, ease: 'easeOut' },
+              filter: { duration: 0.2 },
+              boxShadow: { duration: 0.2 },
+            }}
+            whileTap={{ scale: 0.94 }}
+            // Use framer-motion's pointer-event detection — fires only for this element
+            onHoverStart={() => !isMobile && setHoveredId(btn.id)}
+            onHoverEnd={() => !isMobile && setHoveredId(null)}
+          >
+            {/* Desktop: label width animated per-button via state */}
+            {!isMobile && (
+              <motion.span
+                className="cf-label"
+                animate={
+                  isHovered
+                    ? { width: 76, opacity: 1, marginRight: 9 }
+                    : { width: 0, opacity: 0, marginRight: 0 }
+                }
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+              >
+                {btn.label}
+              </motion.span>
+            )}
+
+            {/* Mobile: label always visible, layout handled by CSS */}
+            {isMobile && (
+              <span className="cf-label-mobile">{btn.label}</span>
+            )}
+
+            <span className="cf-icon">{btn.icon}</span>
+          </motion.a>
+        )
+      })}
     </div>
   )
 }

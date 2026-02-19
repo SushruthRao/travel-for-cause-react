@@ -14,24 +14,16 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0;
   padding: 13px 14px;
   background: var(--cf-color);
   color: #fff;
   border-radius: 10px 0 0 10px;
-  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.18);
   cursor: pointer;
   text-decoration: none;
-  overflow: hidden;
-  transition: filter 0.2s, box-shadow 0.2s;
+  /* No CSS :hover rules — all hover effects are driven by JS state */
 }
 
-.cf-btn:hover {
-  filter: brightness(1.08);
-  box-shadow: -4px 4px 18px rgba(0, 0, 0, 0.25);
-}
-
-/* Icon stays fixed size */
+/* Icon */
 .cf-icon {
   display: flex;
   align-items: center;
@@ -41,22 +33,15 @@
   height: 20px;
 }
 
-/* Label slides out to the left on hover */
+/* Desktop animated label — framer-motion controls width & opacity */
 .cf-label {
   font-size: 0.8rem;
   font-weight: 600;
   color: #fff;
   white-space: nowrap;
-  max-width: 0;
   overflow: hidden;
-  opacity: 0;
-  transition: max-width 0.3s ease, opacity 0.25s ease, margin 0.3s ease;
-}
-
-.cf-btn:hover .cf-label {
-  max-width: 100px;
-  opacity: 1;
-  margin-right: 10px;
+  display: inline-block;
+  /* width / opacity / margin are set via framer-motion animate, not CSS */
 }
 
 /* ── Mobile: full-width bar pinned to the bottom ── */
@@ -80,22 +65,7 @@
     gap: 4px;
     padding: 10px 6px 12px;
     border-radius: 0;
-    box-shadow: none;
     border-top: 1px solid rgba(255, 255, 255, 0.15);
-  }
-
-  /* Always show labels on mobile */
-  .cf-label {
-    max-width: none;
-    opacity: 1;
-    font-size: 0.62rem;
-    letter-spacing: 0.3px;
-    margin-right: 0;
-    overflow: visible;
-  }
-
-  .cf-btn:hover .cf-label {
-    margin-right: 0;
   }
 
   .cf-icon {
@@ -106,5 +76,21 @@
   .cf-icon svg {
     width: 18px;
     height: 18px;
+  }
+}
+
+/* Mobile-only label (always visible, not animated) */
+.cf-label-mobile {
+  display: none;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 640px) {
+  .cf-label-mobile {
+    display: block;
   }
 }
