@@ -1,23 +1,48 @@
 .hero {
-  background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 55%, #40916c 100%);
   position: relative;
   overflow: hidden;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
 }
 
-.hero::after {
-  content: '';
+/* ---------- backgrounds ---------- */
+.hero-bg-track {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.18);
+  z-index: 0;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  /* ready for real images: */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.38);
+  z-index: 1;
   pointer-events: none;
 }
 
+/* ---------- content ---------- */
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding-top: 80px;
-  padding-bottom: 80px;
-  max-width: 700px;
+  padding-bottom: 108px;
+  width: 100%;
+}
+
+.hero-slide {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
 }
 
 .hero-label {
@@ -25,7 +50,7 @@
   font-weight: 700;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 18px;
 }
 
@@ -36,6 +61,7 @@
   line-height: 1.1;
   margin-bottom: 22px;
   letter-spacing: -1px;
+  white-space: pre-line;
 }
 
 .hero-subtitle {
@@ -43,7 +69,7 @@
   color: rgba(255, 255, 255, 0.82);
   line-height: 1.75;
   margin-bottom: 40px;
-  max-width: 540px;
+  max-width: 520px;
 }
 
 .hero-actions {
@@ -61,12 +87,11 @@
   font-size: 0.9rem;
   font-weight: 700;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
-  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  transition: background 0.2s, box-shadow 0.2s;
 }
 
 .btn-hero-primary:hover {
   background: #f0f4f0;
-  transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
 }
 
@@ -87,9 +112,141 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* ---------- arrows ---------- */
+.hero-arrow-wrap {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  transform: translateY(-50%);
+  /* wrapper handles position; framer-motion handles scale on inner button */
+}
+
+.hero-arrow-wrap.hero-arrow-prev { left: 24px; }
+.hero-arrow-wrap.hero-arrow-next { right: 24px; }
+
+.hero-arrow {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: border-color 0.2s;
+}
+
+.hero-arrow:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.hero-arrow svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* ---------- footer: dots · counter · progress ---------- */
+.hero-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 28px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+}
+
+.hero-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.25s, width 0.3s ease, border-radius 0.3s ease;
+}
+
+.hero-dot.active {
+  background: #fff;
+  width: 24px;
+  border-radius: 4px;
+}
+
+.hero-counter {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 2px;
+  white-space: nowrap;
+  margin-right: auto;
+}
+
+.hero-progress-track {
+  flex: 1;
+  max-width: 160px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-left: auto;
+}
+
+.hero-progress-fill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 2px;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 768px) {
+  .hero-arrow {
+    width: 38px;
+    height: 38px;
+  }
+
+  .hero-arrow-wrap.hero-arrow-prev { left: 12px; }
+  .hero-arrow-wrap.hero-arrow-next { right: 12px; }
+
+  .hero-arrow svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
 @media (max-width: 640px) {
+  .hero {
+    min-height: 520px;
+  }
+
   .hero-content {
     padding-top: 56px;
-    padding-bottom: 56px;
+    padding-bottom: 96px;
+  }
+
+  .hero-counter,
+  .hero-progress-track {
+    display: none;
+  }
+
+  .hero-footer {
+    justify-content: center;
+    padding: 16px 24px;
   }
 }
