@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import './Navbar.css'
 
 const navLinks = [
@@ -14,7 +15,12 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="navbar">
+    <motion.header
+      className="navbar"
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+    >
       <div className="navbar-inner container">
         <a href="/" className="navbar-logo">
           Travel for a Cause
@@ -29,7 +35,14 @@ export default function Navbar() {
         </nav>
 
         <div className="navbar-cta">
-          <a href="#contact" className="btn-primary">Contact Us</a>
+          <motion.a
+            href="#contact"
+            className="btn-primary"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Contact Us
+          </motion.a>
         </div>
 
         <button
@@ -42,6 +55,6 @@ export default function Navbar() {
           <span />
         </button>
       </div>
-    </header>
+    </motion.header>
   )
 }

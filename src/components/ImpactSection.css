@@ -97,12 +97,12 @@
   border-radius: var(--radius-lg);
   background: var(--bg-light);
   text-align: center;
-  transition: box-shadow 0.2s, transform 0.2s;
+  /* transform handled by framer-motion; only transition box-shadow */
+  transition: box-shadow 0.2s;
 }
 
 .badge-card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-3px);
 }
 
 .badge-icon {

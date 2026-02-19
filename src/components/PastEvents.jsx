@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import './PastEvents.css'
 
 const pastEvents = [
@@ -42,39 +43,58 @@ export default function PastEvents() {
   return (
     <section className="past-events-section" id="past-events">
       <div className="container">
-        <button
+        <motion.button
           className={`past-toggle${open ? ' open' : ''}`}
           onClick={() => setOpen(!open)}
+          whileTap={{ scale: 0.99 }}
         >
           <span>Past Experiences</span>
-          <svg
-            className={`chevron${open ? ' rotated' : ''}`}
+          <motion.svg
+            className="chevron"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="2.5"
+            animate={{ rotate: open ? 180 : 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
             <polyline points="6 9 12 15 18 9" />
-          </svg>
-        </button>
+          </motion.svg>
+        </motion.button>
 
-        {open && (
-          <div className="past-events-grid">
-            {pastEvents.map(event => (
-              <article key={event.id} className="past-event-card">
-                <div className="past-event-thumb" />
-                <div className="past-event-body">
-                  <h3 className="past-event-title">{event.title}</h3>
-                  <p className="past-event-desc">{event.description}</p>
-                  <div className="past-event-meta">
-                    <span>{event.date}</span>
-                    <span>{event.location}</span>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+              style={{ overflow: 'hidden' }}
+            >
+              <div className="past-events-grid">
+                {pastEvents.map((event, i) => (
+                  <motion.article
+                    key={event.id}
+                    className="past-event-card"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + i * 0.07, duration: 0.4, ease: 'easeOut' }}
+                  >
+                    <div className="past-event-thumb" />
+                    <div className="past-event-body">
+                      <h3 className="past-event-title">{event.title}</h3>
+                      <p className="past-event-desc">{event.description}</p>
+                      <div className="past-event-meta">
+                        <span>{event.date}</span>
+                        <span>{event.location}</span>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   )

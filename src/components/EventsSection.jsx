@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import EventCard from './EventCard'
 import './EventsSection.css'
 
@@ -48,24 +49,41 @@ const events = [
   },
 ]
 
+const gridVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.13 } },
+}
+
 export default function EventsSection() {
   return (
     <section className="events-section" id="events">
       <div className="container">
-        <div className="events-header">
+        <motion.div
+          className="events-header"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.55, ease: 'easeOut' }}
+        >
           <p className="section-label">Community Events</p>
           <h2 className="section-title">Upcoming Experiences</h2>
           <p className="section-desc">
             Immersive, hands-on programs rooted in community needs — integrating
             conservation, culture, and service into transformative youth learning.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="events-grid">
+        <motion.div
+          className="events-grid"
+          variants={gridVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
+        >
           {events.map(event => (
             <EventCard key={event.id} event={event} />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

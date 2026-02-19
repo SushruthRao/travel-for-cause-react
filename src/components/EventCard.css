@@ -6,12 +6,12 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.25s, transform 0.25s;
+  /* transform is handled by framer-motion; only transition box-shadow via CSS */
+  transition: box-shadow 0.25s;
 }
 
 .event-card:hover {
   box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
 }
 
 .event-card-image {

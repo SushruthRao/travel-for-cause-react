@@ -1,10 +1,24 @@
+import { motion } from 'framer-motion'
 import './EventCard.css'
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 32 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: 'easeOut' },
+  },
+}
 
 export default function EventCard({ event }) {
   const { title, date, location, duration, time, price, description } = event
 
   return (
-    <article className="event-card">
+    <motion.article
+      className="event-card"
+      variants={cardVariants}
+      whileHover={{ y: -6, transition: { type: 'spring', stiffness: 300, damping: 22 } }}
+    >
       <div className="event-card-image">
         <div className="event-card-placeholder" />
         <span className="event-card-price">{price}</span>
@@ -41,8 +55,15 @@ export default function EventCard({ event }) {
           </div>
         </div>
 
-        <a href="#contact" className="btn-more-details">MORE DETAILS</a>
+        <motion.a
+          href="#contact"
+          className="btn-more-details"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          MORE DETAILS
+        </motion.a>
       </div>
-    </article>
+    </motion.article>
   )
 }
