@@ -55,25 +55,18 @@ const contentVariants = {
 
 export default function Hero() {
   const [current, setCurrent] = useState(0)
-  const [paused, setPaused] = useState(false)
 
   const goTo = (i) => setCurrent(i)
   const goPrev = () => setCurrent(i => (i - 1 + slides.length) % slides.length)
   const goNext = () => setCurrent(i => (i + 1) % slides.length)
 
   useEffect(() => {
-    if (paused) return
     const t = setTimeout(() => setCurrent(i => (i + 1) % slides.length), INTERVAL)
     return () => clearTimeout(t)
-  }, [current, paused])
+  }, [current])
 
   return (
-    <section
-      className="hero"
-      id="home"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
+    <section className="hero" id="home">
       {/* Crossfading backgrounds — swap gradient for backgroundImage when images are ready */}
       <div className="hero-bg-track">
         <AnimatePresence>

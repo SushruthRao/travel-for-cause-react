@@ -5,6 +5,7 @@ import EventsSection from './components/EventsSection'
 import PastEvents from './components/PastEvents'
 import ImpactSection from './components/ImpactSection'
 import Footer from './components/Footer'
+import ContactFloat from './components/ContactFloat'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <ImpactSection />
       </main>
       <Footer />
+      <ContactFloat />
     </>
   )
 }
